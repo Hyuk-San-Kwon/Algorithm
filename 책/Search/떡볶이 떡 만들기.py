@@ -23,7 +23,7 @@ while True:
       
     elif sum > M:
         if sum > M + n:
-            print(start, sum)
+            #print(start, sum)
             start = (start + lengths[N - 1]) // 2
             
             continue
@@ -33,7 +33,7 @@ while True:
             break
     
         else:
-            print(start, sum, 1, n)
+            print(start, sum)
             break
     else:   
         print(start, sum)
