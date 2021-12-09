@@ -3,7 +3,7 @@ days = int(input())
 date = [99999] * 10000
 money = [0] * 10000
 
-answer = [0] * 100
+answer = [0] * (days + 10)
 
 for i in range(days):
     data = list(map(int, input().split()))
@@ -18,4 +18,4 @@ for today in range(days, 0, -1):
     else:
         answer[today] = answer[today + 1]
 
-print(answer[1])
+print(answer)
