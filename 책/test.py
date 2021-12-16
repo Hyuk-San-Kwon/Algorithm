@@ -1,2 +1,3 @@
-for i in range(10,0, -1):
-    print(i)
+t = [0,1]
+a= t.pop(0)
+print(a)
