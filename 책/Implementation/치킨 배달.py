@@ -73,13 +73,3 @@ for i in range(len(a)):
     solution(a[i])    
     
 print(min(answers)   )
-    
-    
-        
-
-
-
-
-    
-
-    

@@ -17,14 +17,9 @@ def bfs(src, K,N):
         v = queue.popleft()
         
         for des in (array[v]):
-            #print(array[v])
-            
-            #print(visited[des])
             if visited[des] == 0:
                 queue.append(des)
-                print(des)
                 visited[des] += visited[v] + 1
-                print(visited[des])
             else:
                 continue
        
