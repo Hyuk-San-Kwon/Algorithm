@@ -1,131 +1,155 @@
-from collections import deque
-import sys
-input = sys.stdin.readline
 
-n = int(input())
-size = int(2)
+N, M ,H = map(int, input().split() )
+from itertools import combinations
+import copy
 
-space = []
-for i in range(n):
-    space.append(list(map(int, input().split())))
-#상좌우하
-dx = [-1,0,0,1]
-dy = [0,-1,1,0]
+graph = []
+graph = [[0 for _ in range(N)] for _ in range(H)]
 
-for i in range(n):
-    for j in range(n):
-        if space[i][j] == 9:
-            x,y = i ,j
-            break
-
-
-def searching(x,y,z,queue,answer,size ):
-
-    for i in range(4):
-        nx = x + dx[i]
-        ny = y + dy[i]
-        nz = z
- 
-        if nx < 0 or ny < 0 or nx >= n or ny >= n:
-            continue
-        elif space[nx][ny] != 0 and space[nx][ny] > size:
-            continue
-        elif space[nx][ny] == 0:
-            nz += 1
-            space[nx][ny] = 99 #지나옴
-            queue.append((nx,ny,nz))
-            continue
-        elif space[nx][ny] == size:
-            nz += 1
-            space[nx][ny] = 10 #지나옴
-            queue.append((nx,ny,nz))
-            continue
-        elif space[nx][ny] < size:
-            nz += 1
-            answer.append((nx,ny,nz))
-        
-
-            
     
+for i in range(M):
+    
+    x, y= map(int, input().split())
+    x,y = x-1, y-1
+    graph[x][y] = 1 # 우 이동
+   
+
+pos = []
+
+for i in range(H):
+    for j in range(N-1):
+        if graph[i][j] == 0 :
+            pos.append([i,j])
 
 
 
-
-def bfs(x,y,size):
-
-    orix, oriy = x, y
-    queue = deque()
-    queue.append((x,y,0))
-    eatcounts = 0
-    movement = 0
-    answer = deque()
-    change = False
-
-    while queue:
+def search(graph):
+    temp = graph
+   
+    for i in range(N):
+        start_x = 0
+        start_y = i
+        for j in range(H):
+            start_x = j
+       
+            if temp[start_x][start_y] == 1:
+                start_y += 1
+            elif start_y >= 1:
+                if temp[start_x][start_y - 1] == 1:
+                    start_y -= 1
+       
+        if start_y != i:
+            return -1
         
+    return 1
+a = -1
+answer =[]
+graph_2 = copy.deepcopy(graph)
+a = search(graph_2)
+if a == 1:
+    answer.append(0)
+if answer:
+    print(min(answer))
+else:
+    for i in range(len(pos)):
+        graph_2 = copy.deepcopy(graph)
+        x, y = pos[i][0], pos[i][1]
+        if 0 <=  y + 1 <N:
+            if graph_2[x][y+1] == 1:
+                continue
+        if 0 <=y - 1 <N :
+            if graph_2[x][y-1] == 1:
+                continue
+        
+        graph_2[x][y] = 1
+    
+        
+        
+        a = search(graph_2)
+        if a == 1:
+            answer.append(1)
+            break
+    
+    if answer:
+        print(min(answer))
+    else:
 
-        x,y,z = queue.popleft()
-        queue.append((x,y,z))
+        pos_2 = list(combinations(pos,2))
 
-
-        while queue:
-            x,y,z = queue.popleft()
-            searching(x,y,z,queue,answer,size)
-      
-     
-        x,y,z = 10e9,10e9,10e9
-        while answer:
-            while queue:
-                queue.pop()
-            change = True
+        for i in range(len(pos_2)):
+            graph_2 = copy.deepcopy(graph)
+            x, y = pos_2[i][0][0], pos_2[i][0][1]
+            if 0 <=  y + 1 <N:
+                if graph_2[x][y+1] == 1:
+                    continue
+            if 0 <=y - 1 <N :
+                if graph_2[x][y-1] == 1:
+                    continue
+            graph_2[x][y] = 1
             
-            #print(answer)
-            nx, ny, nz = answer.pop()
+        
             
-            if nz < z:
-                z = nz
-                x = nx
-                y = ny
+            x, y = pos_2[i][1][0], pos_2[i][1][1]
+            if 0 <=  y + 1 <N:
+                if graph_2[x][y+1] == 1:
+                    continue
+            if 0 <=y - 1 <N :
+                if graph_2[x][y-1] == 1:
+                    continue
+            graph_2[x][y] = 1
+          
+        
+            a = search(graph_2)
+            if a == 1:
+                answer.append(2)
+                break
+        if answer:
+            print(min(answer))
+        else:
+
+
+            pos_3 = list(combinations(pos,3))
+            for i in range(len(pos_3)):
+                graph_2 = copy.deepcopy(graph)
+                x, y = pos_3[i][0][0], pos_3[i][0][1]
+                if 0 <=  y + 1 <N:
+                    if graph_2[x][y+1] == 1:
+                        continue
+                if 0 <=y - 1 <N :
+                    if graph_2[x][y-1] == 1:
+                        continue
+                graph_2[x][y] = 1
+              
                 
+                x, y = pos_3[i][1][0], pos_3[i][1][1]
+                if 0 <=  y + 1 <N:
+                    if graph_2[x][y+1] == 1:
+                        continue
+                if 0 <=y - 1 <N :
+                    if graph_2[x][y-1] == 1:
+                        continue
+                graph_2[x][y] = 1
+             
                 
-            if nz == z:
-                if nx < x:
-                    x = nx
-                    y = ny
+                x, y = pos_3[i][2][0], pos_3[i][2][1]
+                if 0 <=  y + 1 <N:
+                    if graph_2[x][y+1] == 1:
+                        continue
+                if 0 <=y - 1 <N :
+                    if graph_2[x][y-1] == 1:
+                        continue
+                graph_2[x][y] = 1
+            
+            
                     
-                elif nx == x:
-                    if ny < y:
-                        y = ny
-            #print(x, y, z)
+                a = search(graph_2)
+                if a == 1:
+                    answer.append(3)
+                    break
 
+            if answer:
+                print(min(answer))
+            else:
+                print(-1)
 
-        if change == True:
-            
-            eatcounts += 1
-            #print(eatcounts)
-            
-                        
-            for j in range(n):
-                for k in range(n):
-                    if space[j][k] == 99:
-                        space[j][k] = 0
-                    elif space[j][k] == 10:
-                        space[j][k] = size
-                                    
-            if eatcounts == size and size < 7:
-                size += 1
-                eatcounts = 0
-
-
-            space[orix][oriy] = 0
-            space[x][y] = 9
-            orix, oriy = x, y
-            movement = z 
-            queue.append((x,y,z))
-            #print(space)
-            change = False
-            #print(space)
-    return movement
-
-
-print(bfs(x,y,size))
+        
