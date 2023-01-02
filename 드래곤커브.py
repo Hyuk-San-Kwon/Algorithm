@@ -1,5 +1,4 @@
-from collections import deque
-from re import L
+
 N = int(input())
 
 orders = []
